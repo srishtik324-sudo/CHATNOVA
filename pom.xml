@@ -57,7 +57,14 @@
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
- 
+        
+        <!-- OpenAI Java SDK -->
+        <dependency>
+            <groupId>com.openai</groupId>
+            <artifactId>openai-java</artifactId>
+             <version>4.78.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>

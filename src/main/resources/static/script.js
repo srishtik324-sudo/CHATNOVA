@@ -5,61 +5,91 @@ const clearBtn = document.getElementById("clearBtn");
 
 sendBtn.addEventListener("click", sendMessage);
 
-messageInput.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        sendMessage();
-    }
+messageInput.addEventListener("keydown", function (event) {
+if (event.key === "Enter") {
+sendMessage();
+}
 });
 
-function sendMessage() {
+async function sendMessage() {
+const message = messageInput.value.trim();
 
-    const message = messageInput.value.trim();
+if (!message) {
+    return;
+}
 
-    if (message === "") {
-        return;
+addMessage(message, "user");
+messageInput.value = "";
+sendBtn.disabled = true;
+
+try {
+    
+const response = await fetch("/api/chat", {
+    method: "POST",
+    headers: {
+        "Content-Type": "text/plain"
+    },
+    body: message
+});
+
+    const reply = await response.text();
+
+    if (!response.ok) {
+        throw new Error(reply || "Request failed");
     }
 
-    addMessage(message, "user");
+    addMessage(reply, "bot");
 
-    messageInput.value = "";
+} catch (error) {
+    addMessage(
+        "Sorry, server se connection nahi ho pa raha. Please try again.",
+        "bot"
+    );
+    console.error("Chat error:", error);
 
-    // Temporary response
-    setTimeout(function() {
+} finally {
+    sendBtn.disabled = false;
+    messageInput.focus();
+}
 
-        addMessage(
-            "I'm currently being connected to the AI system. 🤖",
-            "bot"
-        );
-
-    }, 500);
 }
 
 function addMessage(message, sender) {
+const messageDiv = document.createElement("div");
+messageDiv.classList.add("message");
 
-    const messageDiv = document.createElement("div");
+const label = document.createElement("strong");
+label.textContent = sender === "user" ? "You:" : "CHATNOVA:";
 
-    messageDiv.classList.add("message");
+const paragraph = document.createElement("p");
+paragraph.textContent = message;
 
-    if (sender === "user") {
-        messageDiv.classList.add("user-message");
-        messageDiv.innerHTML = `<strong>You:</strong><p>${message}</p>`;
-    } else {
-        messageDiv.classList.add("bot-message");
-        messageDiv.innerHTML = `<strong>CHATNOVA:</strong><p>${message}</p>`;
-    }
+messageDiv.classList.add(
+    sender === "user" ? "user-message" : "bot-message"
+);
 
-    chatBox.appendChild(messageDiv);
+messageDiv.appendChild(label);
+messageDiv.appendChild(paragraph);
 
-    chatBox.scrollTop = chatBox.scrollHeight;
+chatBox.appendChild(messageDiv);
+chatBox.scrollTop = chatBox.scrollHeight;
+
 }
 
-clearBtn.addEventListener("click", function() {
+clearBtn.addEventListener("click", function () {
+chatBox.innerHTML = "";
 
-    chatBox.innerHTML = `
-        <div class="message bot-message">
-            <strong>CHATNOVA:</strong>
-            <p>Hello! 👋 I'm CHATNOVA. How can I help you?</p>
-        </div>
-    `;
+const welcomeDiv = document.createElement("div");
+welcomeDiv.classList.add("message", "bot-message");
+
+const label = document.createElement("strong");
+label.textContent = "CHATNOVA:";
+
+const paragraph = document.createElement("p");
+paragraph.textContent = "Hello! 👋 I'm CHATNOVA. How can I help you?";
+
+welcomeDiv.appendChild(label);
+welcomeDiv.appendChild(paragraph);
+chatBox.appendChild(welcomeDiv);
 
 });

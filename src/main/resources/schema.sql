@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS chat_messages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_message VARCHAR(2000) NOT NULL,
+    bot_response VARCHAR(4000) NOT NULL
+);

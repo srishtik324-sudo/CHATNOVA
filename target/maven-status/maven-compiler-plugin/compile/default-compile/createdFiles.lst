@@ -1,0 +1,14 @@
+com\chatnova\exception\ChatException.class
+com\chatnova\concurrency\ChatTask.class
+com\chatnova\model\ChatHistory.class
+com\chatnova\model\ChatMessage.class
+com\chatnova\concurrency\SynchronizationTest.class
+com\chatnova\model\BaseMessage.class
+com\chatnova\ChatnovaApplication.class
+com\chatnova\repository\ChatMessageRepository.class
+com\chatnova\servlet\ChatServlet.class
+com\chatnova\concurrency\ChatCounter.class
+com\chatnova\service\ChatService.class
+com\chatnova\controller\ChatController.class
+com\chatnova\service\AIService.class
+com\chatnova\concurrency\ConcurrencyTest.class
